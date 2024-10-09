@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 90%;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #337ab7;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+        }
+
+        .save-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .editable {
+            background-color: #f9f9f9;
+            border: none;
+            padding: 5px;
+            width: 100%;
+        }
+
+        .editable[disabled] {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>75% मुफ्त सीटों पर प्रवेशित बच्चों की सूची</h2>
+    
+    <form id="studentListForm">
+        <label for="sessionSelect">सत्र का चयन करें :</label>
+        <select id="sessionSelect">
+            <option value="2024-25">2024-25</option>
+            <option value="2023-24">2023-24</option>
+        </select>
+
+        <label for="classSelect">कक्षा का चयन करें:</label>
+        <select id="classSelect">
+            <option value="PP.3+">PP.3+</option>
+            <option value="First">First</option>
+        </select>
+
+        <button type="button" onclick="viewList()">View List Of Student</button>
+    </form>
+
+    <div id="studentTableDiv">
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>NIC Student ID</th>
+                    <th>Student Name</th>
+                    <th>Father Name</th>
+                    <th>Mother Name</th>
+                    <th>Aadhar Verified</th>
+                    <th>Class</th>
+                    <th>Medium</th>
+                    <th>Admission / SR No.</th>
+                    <th>Caste</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th>Religion</th>
+                    <th>CWSN Facility</th>
+                    <th>Type of Disability</th>
+                    <th>Is RTE Student</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- Rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Sample student data organized by session and class
+    let studentData = {
+        "2024-25": {
+            "PP.3+": [
+                {
+                    id: "542303253",
+                    name: "AANYA MALAV",
+                    father: "RUPCHAND",
+                    mother: "BRIJBALA MALAV",
+                    aadharVerified: "N",
+                    class: "PP.3+",
+                    medium: "English",
+                    srNo: "1294",
+                    caste: "OBC",
+                    gender: "Girl",
+                    dob: "11/10/2020",
+                    religion: "Hindu",
+                    cwsn: "Not Applicable",
+                    disability: "Not Applicable",
+                    rte: "YES"
+                },
+                {
+                    id: "541082080",
+                    name: "AARAB BHARGAVA",
+                    father: "AMIT KUMAR BHARGAV",
+                    mother: "LAXMI BHARGAVA",
+                    aadharVerified: "N",
+                    class: "PP.3+",
+                    medium: "English",
+                    srNo: "1550",
+                    caste: "GENERAL",
+                    gender: "Boy",
+                    dob: "30/05/2021",
+                    religion: "Hindu",
+                    cwsn: "Not Applicable",
+                    disability: "Not Applicable",
+                    rte: "NO"
+                },
+
+
+{"id": "542303253", "name": "AANYA MALAV", "father": "RUPCHAND", "mother": "BRIJBALA MALAV", "aadharVerified": "N", "class": "PP.3+", "medium": "English", "srNo": "1294", "caste": "OBC", "gender": "Girl", "dob": "11/10/2020", "religion": "Hindu", "cwsn": "Not Applicable", "disability": "Not Applicable", "rte": "YES"},
+{"id": "541082080", "name": "AARAB BHARGAVA", "father": "AMIT KUMAR BHARGAV", "mother": "LAXMI BHARGAVA", "aadharVerified": "N", "class": "PP.3+", "medium": "English", "srNo": "1550", "caste": "GENERAL", "gender": "Boy", "dob": "30/05/2021", "religion": "Hindu", "cwsn": "Not Applicable", "disability": "Not Applicable", "rte": "NO"},
+{"id": "540713847", "name": "ADITI PRAJAPATI", "father": "MAHAVEER PRAJAPATI", "mother": "NEELU PRAJAPATI", "aadharVerified": "N", "class": "PP.3+", "medium": "English", "srNo": "1460", "caste": "OBC", "gender": "Girl", "dob": "16/03/2021", "religion": "Hindu", "cwsn": "Not Applicable", "disability": "Not Applicable", "rte": "NO"},
+{"id": "540761607", "name": "VIHAN NAGAR", "father": "NITESH", "mother": "PRIYANKA KUMARI", "aadharVerified": "N", "class": "PP.3+", "medium": "English", "srNo": "1501", "caste": "OBC", "gender": "Boy", "dob": "29/04/2021", "religion": "Hindu", "cwsn": "Not Applicable", "disability": "Not Applicable", "rte": "NO"}
+
+
+                
+            ]
+        }
+    };
+
+    function viewList() {
+        const session = document.getElementById('sessionSelect').value;
+        const selectedClass = document.getElementById('classSelect').value;
+
+        const tableBody = document.getElementById('studentTableBody');
+        tableBody.innerHTML = ''; // Clear the table body
+
+        if (studentData[session] && studentData[session][selectedClass]) {
+            const students = studentData[session][selectedClass];
+
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${student.id}</td>
+                    <td><input type="text" class="editable" value="${student.name}" disabled/></td>
+                    <td><input type="text" class="editable" value="${student.father}" disabled/></td>
+                    <td><input type="text" class="editable" value="${student.mother}" disabled/></td>
+                    <td>${student.aadharVerified}</td>
+                    <td>${student.class}</td>
+                    <td>${student.medium}</td>
+                    <td>${student.srNo}</td>
+                    <td>${student.caste}</td>
+                    <td>${student.gender}</td>
+                    <td><input type="date" class="editable" value="${student.dob}" disabled/></td>
+                    <td>${student.religion}</td>
+                    <td>${student.cwsn}</td>
+                    <td>${student.disability}</td>
+                    <td>${student.rte}</td>
+                    <td>
+                        <button class="edit-button" onclick="editRow(this)">Edit Info</button>
+                        <button class="save-button" style="display:none;" onclick="saveRow(this, ${index}, '${session}', '${selectedClass}')">Save</button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        } else {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `
+                <td colspan="17" style="text-align:center;">No data available for the selected session and class</td>
+            `;
+            tableBody.appendChild(noDataRow);
+        }
+    }
+
+    function editRow(button) {
+        const row = button.closest('tr');
+        const inputs = row.querySelectorAll('input');
+        const saveButton = row.querySelector('.save-button');
+
+        // Enable input fields for editing
+        inputs.forEach(input => {
+            input.disabled = false;
+        });
+
+        // Show the save button and hide the edit button
+        button.style.display = 'none';
+        saveButton.style.display = 'inline-block';
+    }
+
+    function saveRow(button, index, session, selectedClass) {
+        const row = button.closest('tr');
+        const inputs = row.querySelectorAll('input');
+        const editButton = row.querySelector('.edit-button');
+
+        // Update student data in the `studentData` object
+        studentData[session][selectedClass][index].name = inputs[0].value;
+        studentData[session][selectedClass][index].father = inputs[1].value;
+        studentData[session][selectedClass][index].mother = inputs[2].value;
+        studentData[session][selectedClass][index].dob = inputs[3].value;
+
+        // Disable input fields after saving
+        inputs.forEach(input => {
+            input.disabled = true;
+        });
+
+        // Show the edit button and hide the save button
+        button.style.display = 'none';
+        editButton.style.display = 'inline-block';
+
+        alert('Student data updated successfully!');
+    }
+</script>
+
+</body>
+</html>
